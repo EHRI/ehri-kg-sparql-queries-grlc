@@ -1,0 +1,157 @@
+#+ summary: Retrieves information for a given archival description
+#+ description: Returns the information for the provided archival description
+#+   in the EHRI-KG, including the following information&#58;
+#+
+#+     - IRI
+#+
+#+     - title
+#+
+#+     - languages
+#+
+#+     - record set type
+#+
+#+     - other titles
+#+
+#+     - scope and content
+#+
+#+     - record resource extent
+#+
+#+     - record resource structure
+#+
+#+     - beginning date
+#+
+#+     - end date
+#+
+#+     - parent archival description
+#+
+#+     - acquisition
+#+
+#+     - identifier
+#+
+#+     - history
+#+
+#+     - appraisal
+#+
+#+     - accruals
+#+
+#+     - conditions of access
+#+
+#+     - conditions of use
+#+
+#+     - script
+#+
+#+     - physical characteristics and technical requirements
+#+
+#+     - other finding aids
+#+
+#+     - location of originals
+#+
+#+     - location of copies
+#+
+#+     - publication note
+#+
+#+     - sources
+#+
+#+     - notes
+#+
+#+     - archivist note
+#+
+#+     - related material
+#+
+#+     - separated material
+#+
+#+     - institution name
+#+
+#+     - link
+#+
+#+     - other identifiers
+#+
+#+     - children descriptions
+#+
+#+     - creators
+#+ tags:
+#+   - archival descriptions
+
+PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX ehri:  <http://lod.ehri-project-test.eu/ontology#>
+PREFIX schema: <http://schema.org/>
+
+SELECT ?archivalDescriptionTitle 
+    (GROUP_CONCAT(DISTINCT ?language) AS ?languages)
+    ?recordSetType
+    (GROUP_CONCAT(DISTINCT ?otherTitle) AS ?otherTitles)
+    (GROUP_CONCAT(DISTINCT ?scopeAndContent) AS ?scopeAndContentValues)
+    (GROUP_CONCAT(DISTINCT ?recordResourceExtent) AS ?recordResourceExtentValues)
+    (GROUP_CONCAT(DISTINCT ?recordResourceStructure) AS ?recordResourceStructureValues)
+    (GROUP_CONCAT(DISTINCT ?beginningDate) AS ?beginningDates)
+    (GROUP_CONCAT(DISTINCT ?endDate) AS ?endDates)
+    ?parentArchivalDescription
+    ?acquisition 
+    ?identifier
+    (GROUP_CONCAT(DISTINCT ?history) AS ?historyValues)
+    (GROUP_CONCAT(DISTINCT ?appraisal) AS ?appraisalValues)
+    (GROUP_CONCAT(DISTINCT ?accruals) AS ?accrualsValues)
+    (GROUP_CONCAT(DISTINCT ?conditionsOfAccess) AS ?conditionsOfAccessValues)
+    (GROUP_CONCAT(DISTINCT ?conditionsOfUse) AS ?conditionsOfUseValues)
+    (GROUP_CONCAT(DISTINCT ?script) AS ?scriptValues)
+    (GROUP_CONCAT(DISTINCT ?physicalCharacterisiticsAndTechnicalRequirements) AS ?physicalCharacteristicsAndTechnicalRequirementsValues)
+    (GROUP_CONCAT(DISTINCT ?otherFindingAids) AS ?otherFindingAidsValues)
+    (GROUP_CONCAT(DISTINCT ?locationOfOriginals) AS ?locationOfOriginalsValues)
+    (GROUP_CONCAT(DISTINCT ?locationOfCopies) AS ?locationOfCopiesValues)
+    (GROUP_CONCAT(DISTINCT ?publicationNote) AS ?publicationNoteValues)
+    (GROUP_CONCAT(DISTINCT ?sources) AS ?sourcesValues)
+    (GROUP_CONCAT(DISTINCT ?notes) AS ?notesValues)
+    (GROUP_CONCAT(DISTINCT ?archivistNote) AS ?archivistNoteValues)
+    (GROUP_CONCAT(DISTINCT ?relatedMaterial) AS ?relatedMaterialValues)
+    (GROUP_CONCAT(DISTINCT ?separatedMaterial) AS ?separatedMaterialValues)
+    ?institutionName
+    ?link
+    (GROUP_CONCAT(DISTINCT ?otherIdentifier) AS ?otherIdentifiers)
+    (GROUP_CONCAT(DISTINCT ?childrenDescriptions) AS ?childrenDescriptionsValues)
+    (GROUP_CONCAT(DISTINCT ?creator) AS ?creators)
+    WHERE {
+    ?_archivalDescription_iri a ehri:RecordSet ;
+        rico:title ?archivalDescriptionTitle .
+    OPTIONAL { ?_archivalDescription_iri rico:hasOrHadSomeMembersWithLanguage/rico:name ?language . }
+    OPTIONAL { ?_archivalDescription_iri rico:hasRecordSetType ?recordSetType . }
+    OPTIONAL { ?_archivalDescription_iri rico:hasOrHadTitle ?otherTitle . }
+    OPTIONAL { ?_archivalDescription_iri rico:scopeAndContent ?scopeAndContent . }
+    OPTIONAL { ?_archivalDescription_iri rico:recordResourceExtent ?recordResourceExtent . }
+    OPTIONAL { ?_archivalDescription_iri rico:recordResourceStructure ?recordResourceStructure . }
+    OPTIONAL { ?_archivalDescription_iri rico:date ?date . }
+    OPTIONAL { ?_archivalDescription_iri rico:hasBeginningDate ?beginningDate . }
+    OPTIONAL { ?_archivalDescription_iri rico:hasEndDate ?endDate . }
+    OPTIONAL { ?_archivalDescription_iri rico:isOrWasIncludedIn ?parentArchivalDescription . }
+    OPTIONAL { ?_archivalDescription_iri rico:resultsOrResultedFrom/rico:generalDescription ?acquisition . }
+    OPTIONAL { ?_archivalDescription_iri rico:isOrWasIncludedIn ?parentArchivalDescription . }
+    OPTIONAL { ?_archivalDescription_iri rico:identifier ?identifier . }
+    OPTIONAL { ?_archivalDescription_iri rico:history ?history . }
+    OPTIONAL { ?_archivalDescription_iri ehri:appraisal ?appraisal . }
+    OPTIONAL { ?_archivalDescription_iri rico:accruals ?accruals . }
+    OPTIONAL { ?_archivalDescription_iri rico:conditionsOfAccess ?conditionsOfAccess . }
+    OPTIONAL { ?_archivalDescription_iri rico:conditionsOfUse ?conditionsOfUse . }
+    OPTIONAL { ?_archivalDescription_iri ehri:hasOrHadScript/rico:name ?script . }
+    OPTIONAL { ?_archivalDescription_iri ehri:physicalCharacterisiticsAndTechnicalRequirements ?physicalCharacteristicsAndTechnicalRequirements . }
+    OPTIONAL { ?_archivalDescription_iri ehri:otherFindingAids ?otherFindingAids . }
+    OPTIONAL { ?_archivalDescription_iri ehri:locationOfOriginals ?locationOfOriginals . }
+    OPTIONAL { ?_archivalDescription_iri ehri:locationOfCopies ?locationOfCopies . }
+    OPTIONAL { ?_archivalDescription_iri ehri:publicationNote ?publicationNote . }
+    OPTIONAL { ?_archivalDescription_iri ehri:sources ?sources . }
+    OPTIONAL { ?_archivalDescription_iri ehri:notes ?notes . }
+    OPTIONAL { ?_archivalDescription_iri ehri:archivistNote ?archivistNote . }
+    OPTIONAL { ?_archivalDescription_iri ehri:relatedMaterial ?relatedMaterial . }
+    OPTIONAL { ?_archivalDescription_iri ehri:separatedMaterial ?separatedMaterial . }
+    OPTIONAL { ?_archivalDescription_iri rico:hasOrHadHolder/rico:name ?institutionName . }
+    OPTIONAL { ?_archivalDescription_iri rdfs:seeAlso ?link . }
+    OPTIONAL { ?_archivalDescription_iri rico:hasOrHadIdentifier/rico:textualValue ?otherIdentifier . }
+    OPTIONAL { ?_archivalDescription_iri rico:includesOrIncluded/rico:title ?childrenDescriptions . }
+    OPTIONAL { ?_archivalDescription_iri rico:hasCreator/rico:name ?creator . }    
+} GROUP BY ?archivalDescriptionTitle 
+    ?recordSetType 
+    ?parentArchivalDescription
+    ?acquisition 
+    ?identifier
+    ?institutionName
+    ?link

@@ -1,0 +1,13 @@
+#+ summary: Returns the total number of archival descriptions.
+#+ tags:
+#+   - archival descriptions
+#+   - mcp
+
+PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX ehri:  <http://lod.ehri-project-test.eu/ontology#>
+
+SELECT (COUNT(?archivalDescription) AS ?totalArchivalDescriptions) WHERE {
+	?archivalDescription a ehri:RecordSet .
+}

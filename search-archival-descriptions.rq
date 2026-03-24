@@ -1,0 +1,74 @@
+#+ summary: Searches archival descriptions from a given query.
+#+ description: Returns the information for the found archival description
+#+   in the EHRI-KG matching the given query and includes the following information&#58;
+#+
+#+     - IRI
+#+
+#+     - title
+#+
+#+     - languages
+#+
+#+     - record set type
+#+
+#+     - other titles
+#+
+#+     - scope and content
+#+
+#+     - beginning date
+#+
+#+     - end date
+#+
+#+     - identifier
+#+
+#+     - history
+#+
+#+     - institution name
+#+
+#+     - link
+#+
+#+ tags:
+#+   - archival descriptions
+#+   - mcp
+
+PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX ehri:  <http://lod.ehri-project-test.eu/ontology#>
+PREFIX schema: <http://schema.org/>
+PREFIX text: <http://jena.apache.org/text#>
+
+SELECT ?archivalDescription 
+    ?archivalDescriptionTitle 
+    (GROUP_CONCAT(DISTINCT ?language) AS ?languages)
+    ?recordSetType
+    (GROUP_CONCAT(DISTINCT ?otherTitle) AS ?otherTitles)
+    (GROUP_CONCAT(DISTINCT ?scopeAndContent) AS ?scopeAndContentValues)
+    (GROUP_CONCAT(DISTINCT ?beginningDate) AS ?beginningDates)
+    (GROUP_CONCAT(DISTINCT ?endDate) AS ?endDates)
+    ?identifier
+    (GROUP_CONCAT(DISTINCT ?history) AS ?historyValues)
+    ?institutionName
+    ?link
+    WHERE {
+    (?archivalDescription ?score) text:query ?_query  .
+    ?archivalDescription a ehri:RecordSet ;
+        rico:title ?archivalDescriptionTitle .
+    OPTIONAL { ?archivalDescription rico:hasOrHadSomeMembersWithLanguage/rico:name ?language . }
+    OPTIONAL { ?archivalDescription rico:hasRecordSetType ?recordSetType . }
+    OPTIONAL { ?archivalDescription rico:hasOrHadTitle ?otherTitle . }
+    OPTIONAL { ?archivalDescription rico:scopeAndContent ?scopeAndContent . }
+    OPTIONAL { ?archivalDescription rico:hasBeginningDate ?beginningDate . }
+    OPTIONAL { ?archivalDescription rico:hasEndDate ?endDate . }
+    OPTIONAL { ?archivalDescription rico:identifier ?identifier . }
+    OPTIONAL { ?archivalDescription rico:history ?history . }
+    OPTIONAL { ?archivalDescription rico:hasOrHadHolder/rico:name ?institutionName . }
+    OPTIONAL { ?archivalDescription rdfs:seeAlso ?link . }
+} GROUP BY ?archivalDescription 
+    ?archivalDescriptionTitle 
+    ?recordSetType 
+    ?identifier
+    ?institutionName
+    ?link
+    ?score
+ORDER BY DESC(?score)
+LIMIT 10

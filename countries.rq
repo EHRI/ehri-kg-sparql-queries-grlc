@@ -1,0 +1,15 @@
+#+ summary: Retrieves a list of countries.
+#+ description: Returns the IRI and the label for all the countries in the EHRI-KG.
+#+ tags:
+#+   - countries
+#+   - mcp
+
+PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX ehri:  <http://lod.ehri-project-test.eu/ontology#>
+
+SELECT ?country ?countryLabel WHERE {
+	?country a ehri:Country .
+    ?country rico:name ?countryLabel .
+}

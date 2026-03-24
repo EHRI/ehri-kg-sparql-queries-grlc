@@ -1,0 +1,18 @@
+#+ summary: Retrieves the list of archival descriptions held by a given institution.
+#+ description: Returns the IRI and the title for each archival description held by the provided institution in the EHRI-KG.
+#+ tags:
+#+   - archival descriptions
+#+ pagination: 100
+
+PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX ehri:  <http://lod.ehri-project-test.eu/ontology#>
+
+SELECT ?institutionName ?archivalDescription ?archivalDescriptionTitle WHERE {
+    ?_institution_iri a ehri:Institution ;
+        rico:name ?institutionName .
+    ?_institution_iri rico:isOrWasHolderOf ?archivalDescription .
+    ?archivalDescription a ehri:RecordSet ;
+        rico:title ?archivalDescriptionTitle .
+}

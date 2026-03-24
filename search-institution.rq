@@ -1,0 +1,99 @@
+#+ summary: Searches information for a given institution
+#+ description: Returns the information for the provided institution
+#+   in the EHRI-KG, including the following information&#58;
+#+
+#+     - IRI
+#+
+#+     - label
+#+
+#+     - general description
+#+
+#+     - history
+#+
+#+     - opening hours
+#+
+#+     - conditions of access
+#+
+#+     - reproduction services
+#+
+#+     - general context
+#+
+#+     - administrative structure
+#+
+#+     - records management and collecting policies
+#+
+#+     - buildings
+#+
+#+     - accessibility
+#+
+#+     - research services
+#+
+#+     - public areas
+#+
+#+     - webpage
+#+
+#+     - finding aids
+#+
+#+     - sources
+#+
+#+     - address
+#+
+#+     - telephone
+#+
+#+     - email
+#+
+#+     - city
+#+
+#+     - region
+#+
+#+     - country
+#+ tags:
+#+   - institutions
+#+   - mcp
+
+PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX ehri:  <http://lod.ehri-project-test.eu/ontology#>
+PREFIX schema: <http://schema.org/>
+
+SELECT ?institution ?institutionName ?generalDescription ?history ?openingHours ?conditionsOfAccess ?reproductionServices ?generalContext 
+    ?administrativeStructure ?recordsManagementAndCollectingPolicies ?buildings ?accessibility ?researchServices ?publicAreas ?webpage 
+    ?findingAids ?sources  
+    (GROUP_CONCAT(DISTINCT ?address) AS ?addresses)
+    (GROUP_CONCAT(DISTINCT ?telephone) AS ?telephones)
+    (GROUP_CONCAT(DISTINCT ?email) AS ?emails)
+    ?locatedInCity ?locatedInRegion ?locatedInCountry WHERE {
+    ?institution a ehri:Institution ;
+        rico:name ?institutionName .
+    OPTIONAL { ?institution rico:generalDescription ?generalDescription . }
+    OPTIONAL { ?institution rico:rico:history ?history . }
+    OPTIONAL { ?institution schema:openingHours ?openingHours . }
+    OPTIONAL { ?institution ehri:conditionsOfAccess ?conditionsOfAccess . }
+    OPTIONAL { ?institution ehri:reproductionServices ?reproductionServices . }
+    OPTIONAL { ?institution ehri:generalContext ?generalContext . }
+    OPTIONAL { ?institution ehri:administrativeStructure ?administrativeStructure . }
+    OPTIONAL { ?institution ehri:recordsManagementAndCollectingPolicies ?recordsManagementAndCollectingPolicies . }
+    OPTIONAL { ?institution ehri:buildings ?buildings . }
+    OPTIONAL { ?institution ehri:accessibility ?accessibility . }
+    OPTIONAL { ?institution ehri:researchServices ?researchServices . }
+    OPTIONAL { ?institution ehri:publicAreas ?publicAreas . }
+    OPTIONAL { ?institution rdfs:seeAlso ?webpage . }
+    OPTIONAL { ?institution ehri:findingAids ?findingAids . }
+    OPTIONAL { ?institution ehri:sources ?sources . }
+    OPTIONAL { ?institution rico:agentHasOrHadLocation/rico:hasOrHadPhysicalLocation/rico:name ?address . }
+    OPTIONAL { ?institution rico:agentHasOrHadLocation/rico:hasOrHadPhysicalLocation/schema:telephone ?telephone . }
+    OPTIONAL { ?institution rico:agentHasOrHadLocation/rico:hasOrHadPhysicalLocation/schema:email ?email . }
+    OPTIONAL { ?institution rico:agentHasOrHadLocation/rico:isOrWasContainedBy ?city . 
+               ?city a ehri:City ;
+                    rico:name ?locatedInCity . }
+    OPTIONAL { ?institution rico:agentHasOrHadLocation/rico:isOrWasContainedBy ?region .
+                ?region a ehri:Region ;
+                    rico:name ?locatedInRegion . }
+    OPTIONAL { ?institution rico:agentHasOrHadLocation/rico:isOrWasContainedBy ?country . 
+                ?country a ehri:Country ;
+                    rico:name ?locatedInCountry . }
+    FILTER regex(LCASE(STR(?institutionName)), CONCAT(".*", LCASE(?_institutionName), ".*"), "i") 
+} GROUP BY ?institution ?institutionName ?generalDescription ?history ?openingHours ?conditionsOfAccess ?reproductionServices ?generalContext 
+    ?administrativeStructure ?recordsManagementAndCollectingPolicies ?buildings ?accessibility ?researchServices ?publicAreas ?webpage 
+    ?findingAids ?sources ?locatedInCity ?locatedInRegion ?locatedInCountry

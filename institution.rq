@@ -1,0 +1,97 @@
+#+ summary: Retrieves information for a given institution
+#+ description: Returns the information for the provided institution
+#+   in the EHRI-KG, including the following information&#58;
+#+
+#+     - IRI
+#+
+#+     - label
+#+
+#+     - general description
+#+
+#+     - history
+#+
+#+     - opening hours
+#+
+#+     - conditions of access
+#+
+#+     - reproduction services
+#+
+#+     - general context
+#+
+#+     - administrative structure
+#+
+#+     - records management and collecting policies
+#+
+#+     - buildings
+#+
+#+     - accessibility
+#+
+#+     - research services
+#+
+#+     - public areas
+#+
+#+     - webpage
+#+
+#+     - finding aids
+#+
+#+     - sources
+#+
+#+     - address
+#+
+#+     - telephone
+#+
+#+     - email
+#+
+#+     - city
+#+
+#+     - region
+#+
+#+     - country
+#+ tags:
+#+   - institutions
+
+PREFIX rico: <https://www.ica.org/standards/RiC/ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX ehri:  <http://lod.ehri-project-test.eu/ontology#>
+PREFIX schema: <http://schema.org/>
+
+SELECT ?institutionName ?generalDescription ?history ?openingHours ?conditionsOfAccess ?reproductionServices ?generalContext 
+    ?administrativeStructure ?recordsManagementAndCollectingPolicies ?buildings ?accessibility ?researchServices ?publicAreas ?webpage 
+    ?findingAids ?sources  
+    (GROUP_CONCAT(DISTINCT ?address) AS ?addresses)
+    (GROUP_CONCAT(DISTINCT ?telephone) AS ?telephones)
+    (GROUP_CONCAT(DISTINCT ?email) AS ?emails)
+    ?locatedInCity ?locatedInRegion ?locatedInCountry WHERE {
+    ?_institution_iri a ehri:Institution ;
+        rico:name ?institutionName .
+    OPTIONAL { ?_institution_iri rico:generalDescription ?generalDescription . }
+    OPTIONAL { ?_institution_iri rico:rico:history ?history . }
+    OPTIONAL { ?_institution_iri schema:openingHours ?openingHours . }
+    OPTIONAL { ?_institution_iri ehri:conditionsOfAccess ?conditionsOfAccess . }
+    OPTIONAL { ?_institution_iri ehri:reproductionServices ?reproductionServices . }
+    OPTIONAL { ?_institution_iri ehri:generalContext ?generalContext . }
+    OPTIONAL { ?_institution_iri ehri:administrativeStructure ?administrativeStructure . }
+    OPTIONAL { ?_institution_iri ehri:recordsManagementAndCollectingPolicies ?recordsManagementAndCollectingPolicies . }
+    OPTIONAL { ?_institution_iri ehri:buildings ?buildings . }
+    OPTIONAL { ?_institution_iri ehri:accessibility ?accessibility . }
+    OPTIONAL { ?_institution_iri ehri:researchServices ?researchServices . }
+    OPTIONAL { ?_institution_iri ehri:publicAreas ?publicAreas . }
+    OPTIONAL { ?_institution_iri rdfs:seeAlso ?webpage . }
+    OPTIONAL { ?_institution_iri ehri:findingAids ?findingAids . }
+    OPTIONAL { ?_institution_iri ehri:sources ?sources . }
+    OPTIONAL { ?_institution_iri rico:agentHasOrHadLocation/rico:hasOrHadPhysicalLocation/rico:name ?address . }
+    OPTIONAL { ?_institution_iri rico:agentHasOrHadLocation/rico:hasOrHadPhysicalLocation/schema:telephone ?telephone . }
+    OPTIONAL { ?_institution_iri rico:agentHasOrHadLocation/rico:hasOrHadPhysicalLocation/schema:email ?email . }
+    OPTIONAL { ?_institution_iri rico:agentHasOrHadLocation/rico:isOrWasContainedBy ?city . 
+               ?city a ehri:City ;
+                    rico:name ?locatedInCity . }
+    OPTIONAL { ?_institution_iri rico:agentHasOrHadLocation/rico:isOrWasContainedBy ?region .
+                ?region a ehri:Region ;
+                    rico:name ?locatedInRegion . }
+    OPTIONAL { ?_institution_iri rico:agentHasOrHadLocation/rico:isOrWasContainedBy ?country . 
+                ?country a ehri:Country ;
+                    rico:name ?locatedInCountry . }
+} GROUP BY ?institutionName ?generalDescription ?history ?openingHours ?conditionsOfAccess ?reproductionServices ?generalContext 
+    ?administrativeStructure ?recordsManagementAndCollectingPolicies ?buildings ?accessibility ?researchServices ?publicAreas ?webpage 
+    ?findingAids ?sources ?locatedInCity ?locatedInRegion ?locatedInCountry
