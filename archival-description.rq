@@ -69,6 +69,8 @@
 #+     - children descriptions
 #+
 #+     - creators
+#+
+#+     - EHRI Portal link
 #+ tags:
 #+   - archival descriptions
 
@@ -111,6 +113,7 @@ SELECT ?archivalDescriptionTitle
     (GROUP_CONCAT(DISTINCT ?otherIdentifier) AS ?otherIdentifiers)
     (GROUP_CONCAT(DISTINCT ?childrenDescriptions) AS ?childrenDescriptionsValues)
     (GROUP_CONCAT(DISTINCT ?creator) AS ?creators)
+    ?ehriPortalLink
     WHERE {
     ?_archivalDescription_iri a ehri:RecordSet ;
         rico:title ?archivalDescriptionTitle .
@@ -147,7 +150,8 @@ SELECT ?archivalDescriptionTitle
     OPTIONAL { ?_archivalDescription_iri rdfs:seeAlso ?link . }
     OPTIONAL { ?_archivalDescription_iri rico:hasOrHadIdentifier/rico:textualValue ?otherIdentifier . }
     OPTIONAL { ?_archivalDescription_iri rico:includesOrIncluded/rico:title ?childrenDescriptions . }
-    OPTIONAL { ?_archivalDescription_iri rico:hasCreator/rico:name ?creator . }    
+    OPTIONAL { ?_archivalDescription_iri rico:hasCreator/rico:name ?creator . } 
+    BIND(IRI(REPLACE(STR(?_archivalDescription_iri), "http://lod.ehri-project-test.eu/units/", "https://portal.ehri-project.eu/units/")) AS ?ehriPortalLink)   
 } GROUP BY ?archivalDescriptionTitle 
     ?recordSetType 
     ?parentArchivalDescription
@@ -155,3 +159,4 @@ SELECT ?archivalDescriptionTitle
     ?identifier
     ?institutionName
     ?link
+    ?ehriPortalLink

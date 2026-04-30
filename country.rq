@@ -13,6 +13,8 @@
 #+     - research extensive
 #+
 #+     - research summary
+#+
+#+     - EHRI Portal link
 #+ tags:
 #+   - countries
 
@@ -22,12 +24,12 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX ehri:  <http://lod.ehri-project-test.eu/ontology#>
 
-SELECT ?countryLabel ?archivalHistory ?archivalSituation ?researchExtensive ?researchSummary WHERE {
+SELECT ?countryLabel ?archivalHistory ?archivalSituation ?researchExtensive ?researchSummary ?ehriPortalLink WHERE {
 	?_country_iri a ehri:Country ;
         rico:name ?countryLabel .
     OPTIONAL { ?_country_iri ehri:archivalHistory ?archivalHistory . }
     OPTIONAL { ?_country_iri ehri:archivalSituation ?archivalSituation . }
     OPTIONAL { ?_country_iri ehri:researchExtensive ?researchExtensive . }
     OPTIONAL { ?_country_iri ehri:researchSummary ?researchSummary . }
-   
+    BIND(IRI(REPLACE(STR(?_country_iri), "http://lod.ehri-project-test.eu/countries/", "https://portal.ehri-project.eu/countries/")) AS ?ehriPortalLink)   
 }

@@ -26,6 +26,7 @@
 #+
 #+     - link
 #+
+#+     - EHRI Portal link
 #+ tags:
 #+   - archival descriptions
 #+   - mcp
@@ -49,6 +50,7 @@ SELECT ?archivalDescription
     (GROUP_CONCAT(DISTINCT ?history) AS ?historyValues)
     ?institutionName
     ?link
+    ?ehriPortalLink
     WHERE {
     (?archivalDescription ?score) text:query ?_query  .
     ?archivalDescription a ehri:RecordSet ;
@@ -63,6 +65,7 @@ SELECT ?archivalDescription
     OPTIONAL { ?archivalDescription rico:history ?history . }
     OPTIONAL { ?archivalDescription rico:hasOrHadHolder/rico:name ?institutionName . }
     OPTIONAL { ?archivalDescription rdfs:seeAlso ?link . }
+    BIND(IRI(REPLACE(STR(?archivalDescription), "http://lod.ehri-project-test.eu/units/", "https://portal.ehri-project.eu/units/")) AS ?ehriPortalLink) 
 } GROUP BY ?archivalDescription 
     ?archivalDescriptionTitle 
     ?recordSetType 
@@ -70,5 +73,6 @@ SELECT ?archivalDescription
     ?institutionName
     ?link
     ?score
+    ?ehriPortalLink
 ORDER BY DESC(?score)
 LIMIT 10

@@ -47,6 +47,8 @@
 #+     - region
 #+
 #+     - country
+#+
+#+     - EHRI Portal link
 #+ tags:
 #+   - institutions
 #+   - mcp
@@ -63,7 +65,7 @@ SELECT ?institution ?institutionName ?generalDescription ?history ?openingHours 
     (GROUP_CONCAT(DISTINCT ?address) AS ?addresses)
     (GROUP_CONCAT(DISTINCT ?telephone) AS ?telephones)
     (GROUP_CONCAT(DISTINCT ?email) AS ?emails)
-    ?locatedInCity ?locatedInRegion ?locatedInCountry WHERE {
+    ?locatedInCity ?locatedInRegion ?locatedInCountry ?ehriPortalLink WHERE {
     ?institution a ehri:Institution ;
         rico:name ?institutionName .
     OPTIONAL { ?institution rico:generalDescription ?generalDescription . }
@@ -93,7 +95,8 @@ SELECT ?institution ?institutionName ?generalDescription ?history ?openingHours 
     OPTIONAL { ?institution rico:agentHasOrHadLocation/rico:isOrWasContainedBy ?country . 
                 ?country a ehri:Country ;
                     rico:name ?locatedInCountry . }
+    BIND(IRI(REPLACE(STR(?institution), "http://lod.ehri-project-test.eu/institutions/", "https://portal.ehri-project.eu/institutions/")) AS ?ehriPortalLink)
     FILTER regex(LCASE(STR(?institutionName)), CONCAT(".*", LCASE(?_institutionName), ".*"), "i") 
 } GROUP BY ?institution ?institutionName ?generalDescription ?history ?openingHours ?conditionsOfAccess ?reproductionServices ?generalContext 
     ?administrativeStructure ?recordsManagementAndCollectingPolicies ?buildings ?accessibility ?researchServices ?publicAreas ?webpage 
-    ?findingAids ?sources ?locatedInCity ?locatedInRegion ?locatedInCountry
+    ?findingAids ?sources ?locatedInCity ?locatedInRegion ?locatedInCountry ?ehriPortalLink
