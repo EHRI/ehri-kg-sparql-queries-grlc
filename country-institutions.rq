@@ -8,10 +8,11 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX ehri:  <http://lod.ehri-project-test.eu/ontology#>
 
-SELECT ?institution ?institutionName WHERE {
+SELECT ?institution ?institutionName ?ehriPortalLink WHERE {
 	?_country_iri a ehri:Country ;
         rico:name ?countryLabel ;
         rico:isOrWasLocationOfAgent ?institution .
     ?institution a ehri:Institution ;
         rico:name ?institutionName .
+    BIND(IRI(REPLACE(STR(?institution), "http://lod.ehri-project-test.eu/institutions/", "https://portal.ehri-project.eu/institutions/")) AS ?ehriPortalLink)
 }

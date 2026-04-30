@@ -10,11 +10,12 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX ehri:  <http://lod.ehri-project-test.eu/ontology#>
 
-SELECT ?institution ?institutionName ?archivalDescription ?archivalDescriptionTitle WHERE {
+SELECT ?institution ?institutionName ?archivalDescription ?archivalDescriptionTitle ?ehriPortalLink WHERE {
     ?institution a ehri:Institution ;
         rico:name ?institutionName .
     ?institution rico:isOrWasHolderOf ?archivalDescription .
     ?archivalDescription a ehri:RecordSet ;
         rico:title ?archivalDescriptionTitle .
+    BIND(IRI(REPLACE(STR(?archivalDescription), "http://lod.ehri-project-test.eu/units/", "https://portal.ehri-project.eu/units/")) AS ?ehriPortalLink)
     FILTER regex(LCASE(STR(?institutionName)), CONCAT(".*", LCASE(?_institutionName), ".*"), "i") 
 }
