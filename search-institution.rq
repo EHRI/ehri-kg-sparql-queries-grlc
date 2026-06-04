@@ -69,7 +69,7 @@ SELECT ?institution ?institutionName ?generalDescription ?history ?openingHours 
     ?institution a ehri:Institution ;
         rico:name ?institutionName .
     OPTIONAL { ?institution rico:generalDescription ?generalDescription . }
-    OPTIONAL { ?institution rico:rico:history ?history . }
+    OPTIONAL { ?institution rico:history ?history . }
     OPTIONAL { ?institution schema:openingHours ?openingHours . }
     OPTIONAL { ?institution ehri:conditionsOfAccess ?conditionsOfAccess . }
     OPTIONAL { ?institution ehri:reproductionServices ?reproductionServices . }
@@ -86,13 +86,13 @@ SELECT ?institution ?institutionName ?generalDescription ?history ?openingHours 
     OPTIONAL { ?institution rico:agentHasOrHadLocation/rico:hasOrHadPhysicalLocation/rico:name ?address . }
     OPTIONAL { ?institution rico:agentHasOrHadLocation/rico:hasOrHadPhysicalLocation/schema:telephone ?telephone . }
     OPTIONAL { ?institution rico:agentHasOrHadLocation/rico:hasOrHadPhysicalLocation/schema:email ?email . }
-    OPTIONAL { ?institution rico:agentHasOrHadLocation/rico:isOrWasContainedBy ?city . 
+    OPTIONAL { ?institution rico:agentHasOrHadLocation/rico:isContainedByTransitive* ?city . 
                ?city a ehri:City ;
                     rico:name ?locatedInCity . }
-    OPTIONAL { ?institution rico:agentHasOrHadLocation/rico:isOrWasContainedBy ?region .
+    OPTIONAL { ?institution rico:agentHasOrHadLocation/rico:isContainedByTransitive* ?region .
                 ?region a ehri:Region ;
                     rico:name ?locatedInRegion . }
-    OPTIONAL { ?institution rico:agentHasOrHadLocation/rico:isOrWasContainedBy ?country . 
+    OPTIONAL { ?institution rico:agentHasOrHadLocation/rico:isContainedByTransitive* ?country . 
                 ?country a ehri:Country ;
                     rico:name ?locatedInCountry . }
     BIND(IRI(REPLACE(STR(?institution), "http://lod.ehri-project-test.eu/institutions/", "https://portal.ehri-project.eu/institutions/")) AS ?ehriPortalLink)

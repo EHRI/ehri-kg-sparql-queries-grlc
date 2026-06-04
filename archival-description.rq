@@ -28,7 +28,9 @@
 #+
 #+     - identifier
 #+
-#+     - history
+#+     - biographical history
+#+
+#+     - archival history
 #+
 #+     - appraisal
 #+
@@ -92,13 +94,14 @@ SELECT ?archivalDescriptionTitle
     ?parentArchivalDescription
     ?acquisition 
     ?identifier
-    (GROUP_CONCAT(DISTINCT ?history) AS ?historyValues)
+    (GROUP_CONCAT(DISTINCT ?biographicalHistory) AS ?biographicalHistoryValues)
+    (GROUP_CONCAT(DISTINCT ?archivalHistory) AS ?archivalHistoryValues)
     (GROUP_CONCAT(DISTINCT ?appraisal) AS ?appraisalValues)
     (GROUP_CONCAT(DISTINCT ?accruals) AS ?accrualsValues)
     (GROUP_CONCAT(DISTINCT ?conditionsOfAccess) AS ?conditionsOfAccessValues)
     (GROUP_CONCAT(DISTINCT ?conditionsOfUse) AS ?conditionsOfUseValues)
     (GROUP_CONCAT(DISTINCT ?script) AS ?scriptValues)
-    (GROUP_CONCAT(DISTINCT ?physicalCharacterisiticsAndTechnicalRequirements) AS ?physicalCharacteristicsAndTechnicalRequirementsValues)
+    (GROUP_CONCAT(DISTINCT ?physicalCharacteristicsAndTechnicalRequirements) AS ?physicalCharacteristicsAndTechnicalRequirementsValues)
     (GROUP_CONCAT(DISTINCT ?otherFindingAids) AS ?otherFindingAidsValues)
     (GROUP_CONCAT(DISTINCT ?locationOfOriginals) AS ?locationOfOriginalsValues)
     (GROUP_CONCAT(DISTINCT ?locationOfCopies) AS ?locationOfCopiesValues)
@@ -124,25 +127,26 @@ SELECT ?archivalDescriptionTitle
     OPTIONAL { ?_archivalDescription_iri rico:recordResourceExtent ?recordResourceExtent . }
     OPTIONAL { ?_archivalDescription_iri rico:recordResourceStructure ?recordResourceStructure . }
     OPTIONAL { ?_archivalDescription_iri rico:date ?date . }
-    OPTIONAL { ?_archivalDescription_iri rico:hasBeginningDate ?beginningDate . }
-    OPTIONAL { ?_archivalDescription_iri rico:hasEndDate ?endDate . }
+    OPTIONAL { ?_archivalDescription_iri rico:hasBeginningDate/rico:normalizedDateValue ?beginningDate . }
+    OPTIONAL { ?_archivalDescription_iri rico:hasEndDate/rico:normalizedDateValue ?endDate . }
     OPTIONAL { ?_archivalDescription_iri rico:isOrWasIncludedIn ?parentArchivalDescription . }
     OPTIONAL { ?_archivalDescription_iri rico:resultsOrResultedFrom/rico:generalDescription ?acquisition . }
     OPTIONAL { ?_archivalDescription_iri rico:isOrWasIncludedIn ?parentArchivalDescription . }
     OPTIONAL { ?_archivalDescription_iri rico:identifier ?identifier . }
-    OPTIONAL { ?_archivalDescription_iri rico:history ?history . }
+    OPTIONAL { ?_archivalDescription_iri ehri:biographicalHistory ?biographicalHistory . }
+    OPTIONAL { ?_archivalDescription_iri ehri:archivalHistory ?archivalHistory . }
     OPTIONAL { ?_archivalDescription_iri ehri:appraisal ?appraisal . }
     OPTIONAL { ?_archivalDescription_iri rico:accruals ?accruals . }
     OPTIONAL { ?_archivalDescription_iri rico:conditionsOfAccess ?conditionsOfAccess . }
     OPTIONAL { ?_archivalDescription_iri rico:conditionsOfUse ?conditionsOfUse . }
     OPTIONAL { ?_archivalDescription_iri ehri:hasOrHadScript/rico:name ?script . }
-    OPTIONAL { ?_archivalDescription_iri ehri:physicalCharacterisiticsAndTechnicalRequirements ?physicalCharacteristicsAndTechnicalRequirements . }
+    OPTIONAL { ?_archivalDescription_iri ehri:physicalCharacteristicsAndTechnicalRequirements ?physicalCharacteristicsAndTechnicalRequirements . }
     OPTIONAL { ?_archivalDescription_iri ehri:otherFindingAids ?otherFindingAids . }
     OPTIONAL { ?_archivalDescription_iri ehri:locationOfOriginals ?locationOfOriginals . }
     OPTIONAL { ?_archivalDescription_iri ehri:locationOfCopies ?locationOfCopies . }
     OPTIONAL { ?_archivalDescription_iri ehri:publicationNote ?publicationNote . }
-    OPTIONAL { ?_archivalDescription_iri ehri:sources ?sources . }
-    OPTIONAL { ?_archivalDescription_iri ehri:notes ?notes . }
+    OPTIONAL { ?_archivalDescription_iri rico:recordResourceSourceOfInformation ?sources . }
+    OPTIONAL { ?_archivalDescription_iri rico:note ?notes . }
     OPTIONAL { ?_archivalDescription_iri ehri:archivistNote ?archivistNote . }
     OPTIONAL { ?_archivalDescription_iri ehri:relatedMaterial ?relatedMaterial . }
     OPTIONAL { ?_archivalDescription_iri ehri:separatedMaterial ?separatedMaterial . }
