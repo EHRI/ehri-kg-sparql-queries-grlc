@@ -20,7 +20,9 @@
 #+
 #+     - identifier
 #+
-#+     - history
+#+     - biographical history
+#+
+#+     - archival history
 #+
 #+     - institution name
 #+
@@ -47,7 +49,8 @@ SELECT ?archivalDescription
     (GROUP_CONCAT(DISTINCT ?beginningDate) AS ?beginningDates)
     (GROUP_CONCAT(DISTINCT ?endDate) AS ?endDates)
     ?identifier
-    (GROUP_CONCAT(DISTINCT ?history) AS ?historyValues)
+    (GROUP_CONCAT(DISTINCT ?biographicalHistory) AS ?biographicalHistoryValues)
+    (GROUP_CONCAT(DISTINCT ?archivalHistory) AS ?archivalHistoryValues)
     ?institutionName
     ?link
     ?ehriPortalLink
@@ -59,10 +62,11 @@ SELECT ?archivalDescription
     OPTIONAL { ?archivalDescription rico:hasRecordSetType ?recordSetType . }
     OPTIONAL { ?archivalDescription rico:hasOrHadTitle ?otherTitle . }
     OPTIONAL { ?archivalDescription rico:scopeAndContent ?scopeAndContent . }
-    OPTIONAL { ?archivalDescription rico:hasBeginningDate ?beginningDate . }
-    OPTIONAL { ?archivalDescription rico:hasEndDate ?endDate . }
+    OPTIONAL { ?archivalDescription rico:hasBeginningDate/rico:normalizedDateValue ?beginningDate . }
+    OPTIONAL { ?archivalDescription rico:hasEndDate/rico:normalizedDateValue ?endDate . }
     OPTIONAL { ?archivalDescription rico:identifier ?identifier . }
-    OPTIONAL { ?archivalDescription rico:history ?history . }
+    OPTIONAL { ?archivalDescription ehri:biographicalHistory ?biographicalHistory . }
+    OPTIONAL { ?archivalDescription ehri:archivalHistory ?archivalHistory . }
     OPTIONAL { ?archivalDescription rico:hasOrHadHolder/rico:name ?institutionName . }
     OPTIONAL { ?archivalDescription rdfs:seeAlso ?link . }
     BIND(IRI(REPLACE(STR(?archivalDescription), "http://lod.ehri-project-test.eu/units/", "https://portal.ehri-project.eu/units/")) AS ?ehriPortalLink) 
