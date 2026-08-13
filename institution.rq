@@ -68,7 +68,7 @@ SELECT ?institutionName ?generalDescription ?history ?openingHours ?conditionsOf
     ?_institution_iri a ehri:Institution ;
         rico:name ?institutionName .
     OPTIONAL { ?_institution_iri rico:generalDescription ?generalDescription . }
-    OPTIONAL { ?_institution_iri rico:rico:history ?history . }
+    OPTIONAL { ?_institution_iri rico:history ?history . }
     OPTIONAL { ?_institution_iri schema:openingHours ?openingHours . }
     OPTIONAL { ?_institution_iri ehri:conditionsOfAccess ?conditionsOfAccess . }
     OPTIONAL { ?_institution_iri ehri:reproductionServices ?reproductionServices . }
@@ -85,13 +85,13 @@ SELECT ?institutionName ?generalDescription ?history ?openingHours ?conditionsOf
     OPTIONAL { ?_institution_iri rico:agentHasOrHadLocation/rico:hasOrHadPhysicalLocation/rico:name ?address . }
     OPTIONAL { ?_institution_iri rico:agentHasOrHadLocation/rico:hasOrHadPhysicalLocation/schema:telephone ?telephone . }
     OPTIONAL { ?_institution_iri rico:agentHasOrHadLocation/rico:hasOrHadPhysicalLocation/schema:email ?email . }
-    OPTIONAL { ?_institution_iri rico:agentHasOrHadLocation/rico:isOrWasContainedBy ?city . 
+    OPTIONAL { ?_institution_iri rico:agentHasOrHadLocation/rico:isContainedByTransitive* ?city . 
                ?city a ehri:City ;
                     rico:name ?locatedInCity . }
-    OPTIONAL { ?_institution_iri rico:agentHasOrHadLocation/rico:isOrWasContainedBy ?region .
+    OPTIONAL { ?_institution_iri rico:agentHasOrHadLocation/rico:isContainedByTransitive* ?region .
                 ?region a ehri:Region ;
                     rico:name ?locatedInRegion . }
-    OPTIONAL { ?_institution_iri rico:agentHasOrHadLocation/rico:isOrWasContainedBy ?country . 
+    OPTIONAL { ?_institution_iri rico:agentHasOrHadLocation/rico:isContainedByTransitive* ?country . 
                 ?country a ehri:Country ;
                     rico:name ?locatedInCountry . }
     BIND(IRI(REPLACE(STR(?_institution_iri), "http://lod.ehri-project-test.eu/institutions/", "https://portal.ehri-project.eu/institutions/")) AS ?ehriPortalLink)
